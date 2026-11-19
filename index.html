@@ -298,6 +298,46 @@ dialog.cx h3{font-size:20px;margin:6px 0 0}
 .ap-refresh:disabled{opacity:.6;cursor:wait}
 .ap-refresh.spin{animation:apSpin .8s linear infinite}
 @keyframes apSpin{to{transform:rotate(360deg)}}
+
+/* ===== Pengalaman sentuh & animasi mobile ===== */
+html,body{-webkit-tap-highlight-color:transparent}
+button,input,select,textarea,label,.tool,.drop{touch-action:manipulation}
+.tw,#glist,.acct-card{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+/* Umpan balik saat ditekan */
+button:not(:disabled),.tool:not(:disabled){transition:transform .14s ease,background-color .2s ease,color .2s ease,box-shadow .2s ease,opacity .2s ease}
+button:not(:disabled):active,.tool:not(:disabled):active{transform:scale(.95)}
+
+/* Efek ripple */
+.rip-host{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);pointer-events:none;animation:rip .6s ease-out forwards}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+
+/* Loading: spinner di dalam tombol */
+.is-loading{position:relative;color:transparent!important;pointer-events:none}
+.is-loading::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border:2.5px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:apSpin .7s linear infinite}
+
+/* Transisi layar & slide */
+#flow .scr{will-change:transform,opacity}
+#flow .slide.on{animation:slideIn .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes slideIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+#flow .fh,#flow .fp,#flow .fbtn,#flow .fcards,#flow .fauth,.auth-brand{animation:riseIn .5s cubic-bezier(.2,.8,.2,1) both}
+#flow .scr.on .fp{animation-delay:.06s}
+#flow .scr.on .fbtn{animation-delay:.12s}
+#flow .scr.on .fauth,#flow .scr.on .fcards{animation-delay:.05s}
+@keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* Dialog muncul dengan lembut */
+dialog[open]{animation:dlgIn .28s cubic-bezier(.2,.8,.2,1)}
+dialog::backdrop{animation:fadeBd .25s ease}
+@keyframes dlgIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes fadeBd{from{opacity:0}to{opacity:1}}
+
+/* Di layar sentuh, panel profil dibuka dengan ketukan, bukan hover */
+@media (hover:none){
+  .acct:hover .acct-pop{opacity:0;visibility:hidden}
+  .acct.open .acct-pop{opacity:1;visibility:visible;transform:none}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2232%22%20fill%3D%22%230b0b0b%22/%3E%3Cpath%20d%3D%22M35%208%2016%2036h12l-3%2020%2019-28H32z%22%20fill%3D%22%23FFD500%22/%3E%3C/svg%3E">
@@ -746,7 +786,7 @@ $('#gap').onclick=()=>{
   if(!n.size){toast('Nomor baris tidak valid.');return}gsel=n;glist()};
 function blobOf(c,type,q){return new Promise(r=>c.toBlob(r,type,q))}
 $('#gdo').onclick=async()=>{
-  const btn=$('#gdo'),list=[...gsel].sort((a,b)=>a-b);if(!list.length)return;if(window.flazConfirm&&!(await window.flazConfirm(list.length)))return;btn.disabled=true;
+  const btn=$('#gdo'),list=[...gsel].sort((a,b)=>a-b);if(!list.length)return;if(window.flazConfirm&&!(await window.flazConfirm(list.length)))return;btn.disabled=true;btn.classList.add('is-loading');
   try{
     await Promise.all(list.flatMap(i=>dynEls().filter(e=>e.type==='photo'&&rows[i][e.id]).map(e=>loadImg(rows[i][e.id]))));
     await document.fonts.ready;
@@ -777,7 +817,7 @@ $('#gdo').onclick=async()=>{
       :'Gagal membuat sertifikat. Lihat konsol (F12) untuk detail.';
     $('#gc').textContent=msg;$('#gc').style.color='#c92a2a';
   }
-  finally{btn.disabled=!gsel.size}};
+  finally{btn.disabled=!gsel.size;btn.classList.remove('is-loading')}};
 
 
 
@@ -1195,6 +1235,7 @@ useSample();
 
   function setBusy(b){
     submitBtn.disabled = b;
+    submitBtn.classList.toggle('is-loading', b);
     submitBtn.textContent = b ? 'Memproses...' : (mode === 'register' ? 'Daftar' : 'Masuk');
   }
 
@@ -1475,6 +1516,22 @@ useSample();
     if (u.id === uid) { coins = data; renderCoins(); }
     renderUsers();
   }
+
+  // ===== Umpan balik ketukan (ripple) =====
+  document.addEventListener('pointerdown', e => {
+    const b = e.target.closest && e.target.closest('button, .tool, .drop');
+    if (!b || b.disabled) return;
+    const r = b.getBoundingClientRect();
+    const size = Math.max(r.width, r.height) * 1.6;
+    const s = document.createElement('span');
+    s.className = 'ripple';
+    s.style.width = s.style.height = size + 'px';
+    s.style.left = (e.clientX - r.left - size / 2) + 'px';
+    s.style.top = (e.clientY - r.top - size / 2) + 'px';
+    b.classList.add('rip-host');
+    b.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }, { passive: true });
 
   // Pulihkan sesi jika pengguna sudah login sebelumnya
   if (sb) {
