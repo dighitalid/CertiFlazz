@@ -338,6 +338,104 @@ dialog::backdrop{animation:fadeBd .25s ease}
   .acct:hover .acct-pop{opacity:0;visibility:hidden}
   .acct.open .acct-pop{opacity:1;visibility:visible;transform:none}
 }
+
+/* ===== Dialog Flazz & tombol tambah ===== */
+dialog.fz{width:min(380px,92vw);background:#0b0b0b;color:#fff;border:0;border-radius:32px;padding:28px 24px 24px;box-shadow:0 0 0 6px #FFD500,0 24px 60px rgba(0,0,0,.5);text-align:center;font-family:"Space Grotesk",Arial,sans-serif}
+dialog.fz::backdrop{background:rgba(255,213,0,.22);backdrop-filter:blur(4px)}
+.fz-ic{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;background:#FFD500;color:#000;display:grid;place-items:center;animation:cxPop .6s cubic-bezier(.2,.8,.2,1) both}
+.fz-ic svg{width:32px;height:32px;fill:currentColor}
+dialog.fz h3{margin:0;font-size:20px;color:#fff;letter-spacing:-.5px}
+dialog.fz p{color:#b5b5b5;font-size:13px;margin:8px 0 0;line-height:1.4}
+dialog.fz input{width:100%;margin-top:16px;background:#1f1f1f;color:#fff;border:2px solid #333;border-radius:18px;padding:13px 16px;font:700 15px "Space Grotesk",Arial,sans-serif;text-align:center;transition:border-color .2s,box-shadow .2s}
+dialog.fz input:focus{outline:0;border-color:#FFD500;box-shadow:0 0 0 4px rgba(255,213,0,.2)}
+dialog.fz .fz-err{color:#ff6b6b;min-height:16px;margin-top:6px}
+dialog.fz .fz-btns{display:flex;gap:10px;margin-top:16px}
+dialog.fz .fz-btns button{flex:1;border:0;border-radius:99px;padding:13px;font:700 14px "Space Grotesk",Arial,sans-serif;cursor:pointer;transition:transform .14s ease,background-color .2s}
+dialog.fz .fz-btns button:active{transform:scale(.96)}
+dialog.fz .fz-no{background:#1f1f1f;color:#fff}
+dialog.fz .fz-no:hover{background:#2a2a2a}
+dialog.fz .fz-ok{background:#FFD500;color:#000}
+dialog.fz .fz-ok:hover{background:#ffe44d}
+dialog.fz.danger .fz-ic{background:#ff6b6b}
+dialog.fz.danger .fz-ok{background:#ff6b6b}
+dialog.fz.danger .fz-ok:hover{background:#ff8787}
+.addcol{background:#FFD500;color:#000;border:0;border-radius:99px;width:28px;height:28px;font:700 17px/1 "Space Grotesk",Arial,sans-serif;cursor:pointer;display:grid;place-items:center;padding:0;transition:transform .14s ease,background-color .2s}
+.addcol:hover{background:#ffe44d}
+.addcol:active{transform:scale(.9)}
+th.addth{width:1%;text-align:center;padding:6px 8px}
+.addrow{width:100%;justify-content:center;margin-top:10px;gap:8px}
+.addrow .plus{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#0b0b0b;color:#FFD500;font-weight:700;font-size:15px;line-height:1}
+
+/* ===== Geser kolom di Manage Data ===== */
+.grip{display:inline-block;opacity:.55;margin-right:6px;font-size:11px;letter-spacing:-2px;cursor:grab;user-select:none;-webkit-user-select:none}
+th.colh{user-select:none;-webkit-user-select:none;transition:opacity .2s ease}
+th.col-src{opacity:.3}
+.col-ghost{position:fixed;z-index:3000;pointer-events:none;background:#FFD500;color:#000;border-radius:12px;box-shadow:0 14px 30px rgba(0,0,0,.35);display:flex;align-items:center;padding:0 12px;font:700 12px "Space Grotesk",Arial,sans-serif;white-space:nowrap;overflow:hidden;transform:scale(1.05);opacity:.96;margin:0}
+.col-line{position:fixed;z-index:2999;width:3px;background:#FFD500;border-radius:3px;box-shadow:0 0 0 1px #000;pointer-events:none;transition:left .08s ease}
+body.col-dragging,body.col-dragging *{cursor:grabbing!important;user-select:none!important;-webkit-user-select:none!important}
+/* Tombol di baris (.row) tidak boleh menyusut sampai hilang */
+.row>button{min-width:max-content}
+
+/* ===== Animasi geser kolom ===== */
+.colmove{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.colmove.nt{transition:none}
+th.colmove{position:sticky}
+td.colmove{position:relative}
+.colmove.lift{z-index:6;box-shadow:0 14px 30px rgba(0,0,0,.28)}
+th.colmove.lift{background:#FFD500!important;color:#000!important}
+td.colmove.lift{background:#fffbe6!important}
+th.colmove.lift span{color:#000}
+
+/* ===== Overlay loading generate (tema listrik kuning) ===== */
+.genov{position:fixed;inset:0;z-index:2500;background:rgba(11,11,11,.92);display:none;align-items:center;justify-content:center;padding:20px}
+.genov.show{display:flex;animation:fadeBd .25s ease}
+.gen-card{width:min(360px,92vw);background:#0b0b0b;border-radius:32px;padding:34px 26px 28px;text-align:center;color:#fff;box-shadow:0 0 0 2px #FFD500,0 0 48px rgba(255,213,0,.35);position:relative;overflow:hidden;font-family:"Space Grotesk",Arial,sans-serif}
+.gen-bolt{width:88px;height:88px;margin:0 auto;border-radius:50%;background:#FFD500;color:#000;display:grid;place-items:center;animation:genFlick .9s ease-in-out infinite,genGlow 1.4s ease-in-out infinite}
+.gen-bolt svg{width:46px;height:46px;fill:currentColor}
+@keyframes genFlick{0%,100%{transform:scale(1)}20%{transform:scale(1.08) rotate(-5deg)}40%{transform:scale(.96) rotate(4deg)}60%{transform:scale(1.04) rotate(-2deg)}80%{transform:scale(.98)}}
+@keyframes genGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,213,0,.6)}50%{box-shadow:0 0 0 24px rgba(255,213,0,0)}}
+.gen-pct{font-size:68px;font-weight:700;color:#FFD500;letter-spacing:-2px;margin-top:20px;line-height:1;text-shadow:0 0 20px rgba(255,213,0,.55);font-variant-numeric:tabular-nums}
+.gen-pct small{font-size:24px;margin-left:4px;letter-spacing:0}
+.gen-bar{position:relative;height:20px;border-radius:99px;background:#1f1f1f;margin-top:18px;overflow:hidden;border:1px solid #333}
+.gen-fill{height:100%;width:0;border-radius:99px;background:repeating-linear-gradient(-45deg,#FFD500 0 12px,#ffe44d 12px 24px);background-size:34px 34px;box-shadow:0 0 18px rgba(255,213,0,.75);transition:width .35s cubic-bezier(.2,.8,.2,1);animation:genStripe .6s linear infinite}
+@keyframes genStripe{to{background-position:34px 0}}
+.gen-sweep{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);transform:translateX(-100%);animation:genSweep 1.5s ease-in-out infinite;pointer-events:none}
+@keyframes genSweep{to{transform:translateX(100%)}}
+.gen-lbl{color:#FFD500;font-weight:700;font-size:14px;margin:16px 0 0;min-height:18px}
+.gen-sub{color:#777;font-size:12px;margin:6px 0 0}
+
+/* ===== Riwayat sertifikat ===== */
+dialog.hist{width:min(660px,94vw);max-height:88vh;background:#0b0b0b;color:#fff;border:0;border-radius:32px;padding:24px;box-shadow:0 0 0 2px #FFD500,0 30px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:14px;font-family:"Space Grotesk",Arial,sans-serif}
+dialog.hist[open]{display:flex}
+dialog.hist::backdrop{background:rgba(255,213,0,.18);backdrop-filter:blur(4px)}
+.hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hist-tag{display:inline-block;background:#FFD500;color:#000;border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;letter-spacing:1px}
+.hist-head h3{margin:6px 0 0;font-size:24px;letter-spacing:-.5px;color:#fff}
+.hist-x{background:#1f1f1f;color:#fff;border:0;border-radius:99px;width:38px;height:38px;cursor:pointer;font-size:14px;flex:0 0 38px}
+.hist-x:hover{background:#2a2a2a}
+.hist-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hist-sum div{background:#1f1f1f;border-radius:20px;padding:12px 14px;min-width:0}
+.hist-sum span{display:block;color:#b5b5b5;font-size:11px;letter-spacing:.4px;text-transform:uppercase}
+.hist-sum b{display:block;font-size:22px;color:#FFD500;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-note{color:#777;font-size:11px;margin:-6px 0 0}
+.hist-list{overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px;min-height:140px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.hist-item{background:#171717;border:1px solid #262626;border-radius:20px;padding:14px 16px;animation:riseIn .4s cubic-bezier(.2,.8,.2,1) both;transition:border-color .3s,box-shadow .3s}
+.hist-item.flash{border-color:#FFD500;box-shadow:0 0 0 3px rgba(255,213,0,.25);animation:riseIn .4s cubic-bezier(.2,.8,.2,1) both,histFlash 1.6s ease .4s 1}
+@keyframes histFlash{0%,100%{box-shadow:0 0 0 3px rgba(255,213,0,.25)}50%{box-shadow:0 0 0 10px rgba(255,213,0,0)}}
+.hi-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hi-date{color:#fff;font-size:13px}
+.hi-fmt{display:inline-block;background:#262626;border-radius:99px;padding:3px 9px;font-size:11px;font-weight:700;margin-left:8px;color:#FFD500}
+.hi-cost{color:#FFD500;font-weight:700;font-size:17px;white-space:nowrap}
+.hi-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;color:#b5b5b5;font-size:12px}
+.hi-meta b{color:#fff}
+details.hi-files{margin-top:10px}
+details.hi-files summary{cursor:pointer;color:#FFD500;font-size:12px;font-weight:700}
+details.hi-files ul{margin:8px 0 0;padding:0;list-style:none;max-height:160px;overflow:auto;display:flex;flex-direction:column;gap:4px}
+details.hi-files li{font-size:12px;color:#ddd;background:#1f1f1f;border-radius:10px;padding:6px 10px;word-break:break-all}
+.hist-empty{color:#777;text-align:center;padding:30px 10px;font-size:14px;line-height:1.5}
+.ap-hist{width:100%;background:transparent;color:#fff;border:1.5px solid #444;border-radius:99px;padding:10px;font:700 13px "Space Grotesk",Arial,sans-serif;cursor:pointer;transition:border-color .2s,color .2s}
+.ap-hist:hover{border-color:#FFD500;color:#FFD500}
+@media (max-width:520px){.hist-sum{grid-template-columns:1fr 1fr}.hist-sum div:last-child{grid-column:1/-1}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2232%22%20fill%3D%22%230b0b0b%22/%3E%3Cpath%20d%3D%22M35%208%2016%2036h12l-3%2020%2019-28H32z%22%20fill%3D%22%23FFD500%22/%3E%3C/svg%3E">
@@ -410,6 +508,7 @@ dialog::backdrop{animation:fadeBd .25s ease}
       <div class="acct-card">
         <div class="ap-head"><div class="ap-av" id="apAv">F</div><div><b id="apName">-</b><span id="apEmail">-</span></div></div>
         <div class="ap-coin"><div><span>Flazz Coin</span><b id="apCoins">0</b></div><div class="ap-coinact"><button type="button" class="ap-refresh" id="apRefresh" title="Muat ulang saldo" aria-label="Muat ulang saldo">&#8635;</button><button type="button" class="ap-topup" id="apTopup">Top up</button></div></div>
+        <button type="button" class="ap-hist" id="apHist">Riwayat sertifikat</button>
         <button type="button" class="ap-admin" id="apAdmin" hidden>Panel Admin</button>
         <div class="ap-sec" id="topupSec" hidden>
           <h4>Paket Top Up</h4>
@@ -475,13 +574,22 @@ dialog::backdrop{animation:fadeBd .25s ease}
  <aside class="props" id="props"><h3>Properti</h3><div class="empty">Pilih atau tambahkan elemen dinamis untuk mengubah propertinya.</div></aside>
 </main>
 
+<dialog id="fzDlg" class="fz">
+ <div class="fz-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1.5 3.5 13.5h7l-1.5 9 10.5-12.5h-7.2z"/></svg></div>
+ <h3 id="fzTitle"></h3>
+ <p id="fzHint"></p>
+ <input type="text" id="fzInput" autocomplete="off" maxlength="40">
+ <p class="fz-err" id="fzErr"></p>
+ <div class="fz-btns"><button type="button" class="fz-no" id="fzNo">Batal</button><button type="button" class="fz-ok" id="fzOk">Simpan</button></div>
+</dialog>
 <dialog id="dlg">
  <div class="row" style="align-items:center"><h3 style="flex:1">Manage Data</h3><button class="btn ghost" id="dclose" style="flex:0">Selesai</button></div>
  <div class="tw"><table id="tbl"></table></div>
+ <button class="btn ghost addrow" id="addr" type="button"><span class="plus">+</span> Baris</button>
  <div class="row" style="align-items:center;margin-top:4px"><h3 style="flex:1;color:#000;text-transform:none;font-size:14px;letter-spacing:0">Tempel per kolom dari Excel</h3><label style="flex:0 0 auto;flex-direction:row;align-items:center;gap:6px">Mulai dari baris <input type="text" id="cpstart" value="1" style="width:56px;text-align:center" inputmode="numeric"></label></div>
  <div id="cp" class="cpg"></div>
  <details style="margin-top:8px"><summary style="cursor:pointer;font-size:12px;color:#555">Tempel banyak kolom sekaligus (dipisah tab)</summary><textarea id="paste" rows="3" style="margin-top:6px" placeholder="Budi Santoso&#9;Juara 1&#10;Siti Aminah&#9;Juara 2"></textarea></details>
- <div class="row" style="margin-top:10px"><button class="btn" id="addp">Tempel multi-kolom</button><button class="btn ghost" id="addr">+ Baris</button><button class="btn danger" id="clr">Kosongkan</button></div>
+ <div class="row" style="margin-top:10px"><button class="btn" id="addp">Tempel multi-kolom</button><button class="btn danger" id="clr">Kosongkan</button></div>
 </dialog>
 <dialog id="gdlg">
  <div class="row" style="align-items:center"><h3 style="flex:1">Generate Certificate</h3><button class="btn ghost" id="gclose" style="flex:0 0 auto">Tutup</button></div>
@@ -524,6 +632,28 @@ dialog::backdrop{animation:fadeBd .25s ease}
  <div class="row" style="align-items:center"><h3 style="flex:1">Panel Admin</h3><button class="btn ghost" id="admRefresh" style="flex:0 0 auto">Muat ulang</button><button class="btn ghost" id="admClose" style="flex:0 0 auto">Tutup</button></div>
  <div class="row" style="margin-top:12px;align-items:center"><input type="text" id="admSearch" placeholder="Cari nama atau email"><span id="admStatus" style="font-size:12px;color:#555;white-space:nowrap"></span></div>
  <div class="tw"><table><thead><tr><th>Nama</th><th>Email</th><th>Coin</th><th>Tambah / kurangi coin</th></tr></thead><tbody id="admBody"></tbody></table></div>
+</dialog>
+<div id="genOv" class="genov" aria-live="polite">
+ <div class="gen-card">
+  <div class="gen-bolt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1.5 3.5 13.5h7l-1.5 9 10.5-12.5h-7.2z"/></svg></div>
+  <div class="gen-pct"><span id="genPct">0</span><small>%</small></div>
+  <div class="gen-bar"><div class="gen-fill" id="genFill"></div><div class="gen-sweep"></div></div>
+  <p class="gen-lbl" id="genLbl">Menyiapkan...</p>
+  <p class="gen-sub">Mohon tunggu, jangan tutup halaman</p>
+ </div>
+</div>
+<dialog id="histDlg" class="hist">
+ <div class="hist-head">
+  <div><span class="hist-tag">FLAZZ</span><h3>Riwayat Sertifikat</h3></div>
+  <button class="hist-x" id="histClose" type="button" aria-label="Tutup">&#10005;</button>
+ </div>
+ <div class="hist-sum">
+  <div><span>Sertifikat</span><b id="hsCert">0</b></div>
+  <div><span>Coin terpakai</span><b id="hsCoin">0</b></div>
+  <div><span>Perkiraan biaya</span><b id="hsRp">Rp0</b></div>
+ </div>
+ <p class="hist-note">Perkiraan biaya dihitung dari harga 1 Coin = Rp1.500.</p>
+ <div id="histList" class="hist-list"></div>
 </dialog>
 <div class="toast" id="toast"></div>
 
@@ -589,12 +719,60 @@ drop.onclick=()=>file.click();file.onchange=()=>file.files[0]&&loadFile(file.fil
 $('#sample').onclick=useSample;
 /* Manage data */
 const dlg=$('#dlg');
+// Kolom data tambahan: hanya untuk tabel & nama file, tidak tampil di canvas (mis. Order ID)
+let xcols=[];
+let colOrder=[];
+const xid=()=>'x'+(nid++);
 
 $('#manage').onclick=()=>{table();buildCp();dlg.showModal();dlg.querySelectorAll('textarea.cell').forEach(t=>{t.style.height='auto';if(t.scrollHeight)t.style.height=Math.min(120,t.scrollHeight)+'px'})};$('#dclose').onclick=()=>dlg.close();
 $('#addr').onclick=()=>{rows.push({});cur=rows.length-1;table();nav();render()};
 $('#clr').onclick=()=>{rows=[{}];cur=0;table();nav();render()};
+function fzAsk({title,hint='',value='',ok='Simpan',danger=false,input=true,validate=null}){
+  return new Promise(res=>{
+    const d=$('#fzDlg'), inp=$('#fzInput'), okb=$('#fzOk'), nob=$('#fzNo');
+    $('#fzTitle').textContent=title;
+    $('#fzHint').textContent=hint;
+    $('#fzErr').textContent='';
+    inp.style.display=input?'':'none';
+    inp.value=input?value:'';
+    okb.textContent=ok;
+    d.classList.toggle('danger',danger);
+    const done=v=>{okb.onclick=null;nob.onclick=null;inp.onkeydown=null;d.close();res(v)};
+    const submit=()=>{
+      if(!input)return done(true);
+      const v=inp.value.trim();
+      if(!v){$('#fzErr').textContent='Nama tidak boleh kosong.';return}
+      const err=validate?validate(v):null;
+      if(err){$('#fzErr').textContent=err;return}
+      done(v);
+    };
+    okb.onclick=submit;
+    nob.onclick=()=>done(input?null:false);
+    inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();submit()}if(e.key==='Escape')done(null)};
+    d.addEventListener('cancel',e=>{e.preventDefault();done(input?null:false)},{once:true});
+    d.showModal();
+    if(input)setTimeout(()=>{inp.focus();inp.select()},60);
+  });
+}
+function nameTaken(v,except){return xcols.some(o=>o!==except&&o.name===v)||dynEls().some(e=>e.name===v)}
+async function addColumn(){
+  const n=await fzAsk({title:'Tambah kolom data',hint:'Contoh: Order ID. Kolom ini untuk data saja, tidak tampil di canvas.',ok:'Tambah',validate:v=>nameTaken(v)?'Nama kolom sudah ada.':null});
+  if(!n)return;
+  xcols.push({id:xid(),name:n});table();buildCp();toast('Kolom "'+n+'" ditambahkan.');
+}
+async function renameX(x){
+  const n=await fzAsk({title:'Ganti nama kolom',value:x.name,ok:'Simpan',validate:v=>nameTaken(v,x)?'Nama kolom sudah ada.':null});
+  if(!n||n===x.name)return;
+  x.name=n;table();buildCp();
+}
+async function delX(x){
+  const yes=await fzAsk({title:'Hapus kolom?',hint:'Kolom "'+x.name+'" beserta isinya akan dihapus.',input:false,ok:'Hapus',danger:true});
+  if(!yes)return;
+  xcols=xcols.filter(o=>o!==x);rows.forEach(r=>delete r[x.id]);
+  table();nav();render();toast('Kolom dihapus.');
+}
 $('#addp').onclick=()=>{
-  const cols=dynEls().filter(e=>e.type==='text');if(!cols.length){toast('Tambahkan Dynamic Text dulu.');return}
+  const cols=allCols().filter(e=>e.type!=='photo');if(!cols.length){toast('Tambahkan Dynamic Text atau kolom data dulu.');return}
   const L=$('#paste').value.split(/\r?\n/).filter(l=>l.trim());if(!L.length)return;
   if(rows.length===1&&!Object.values(rows[0]).some(Boolean))rows=[];
   L.forEach(l=>{const c=l.split('\t'),r={};cols.forEach((e,i)=>{if(c[i]!==undefined)r[e.id]=c[i].trim()});rows.push(r)});
@@ -744,21 +922,144 @@ async function loadFile(f){
   }catch(err){toast('Gagal membaca file template.')}
   file.value=''}
 /* ===== Manage data ===== */
+function allCols(){
+  const base=[...dynEls(),...xcols];
+  const ord=colOrder.filter(id=>base.some(e=>e.id===id));
+  base.forEach(e=>{if(!ord.includes(e.id))ord.push(e.id)});
+  colOrder=ord;
+  return ord.map(id=>base.find(e=>e.id===id));
+}
 function table(){
-  const T=$('#tbl'),D=dynEls();T.innerHTML='';
-  if(!D.length){T.innerHTML='<tr><td class="empty" style="padding:16px">Belum ada Dynamic Text/Foto. Tambahkan dulu di canvas.</td></tr>';return}
-  const h=T.insertRow();h.innerHTML='<th>#</th>';D.forEach(e=>{const th=document.createElement('th');th.textContent=(e.type==='photo'?'▣ ':'')+e.name;th.title='Klik 2x untuk mengubah nama kolom';th.style.cursor='text';th.ondblclick=()=>renameCol(th,e);h.appendChild(th)});h.appendChild(document.createElement('th'));
+  const T=$('#tbl'),C=allCols();T.innerHTML='';
+  if(!C.length){T.innerHTML='<tr><td class="empty" style="padding:16px">Belum ada Dynamic Text/Foto. Tambahkan dulu di canvas, atau klik + di header kolom.</td></tr>';return}
+  const h=T.insertRow();h.innerHTML='<th>#</th>';
+  C.forEach(e=>{
+    const isX=xcols.includes(e);
+    const th=document.createElement('th');
+    th.className='colh';th.dataset.cid=e.id;
+    const grip=document.createElement('span');grip.className='grip';grip.textContent='⋮⋮';
+    const label=document.createElement('span');label.textContent=(!isX&&e.type==='photo'?'▣ ':'')+e.name;
+    th.append(grip,label);
+    th.title=(isX?'Kolom data. ':'')+'Klik 2x untuk ganti nama. Tahan lalu geser untuk memindahkan kolom.';
+    th.ondblclick=()=>isX?renameX(e):renameCol(th,e);
+    if(isX){
+      const d=document.createElement('button');d.type='button';d.textContent='✕';d.title='Hapus kolom';
+      d.style.cssText='background:none;border:0;color:#FFD500;cursor:pointer;font-size:11px;padding:0 0 0 4px';
+      d.onclick=ev=>{ev.stopPropagation();delX(e)};th.appendChild(d);
+    }
+    th.addEventListener('pointerdown',ev=>startColDrag(ev,th,e.id));
+    h.appendChild(th);
+  });
+  const ad=document.createElement('th');ad.className='addth';
+  const ab=document.createElement('button');ab.type='button';ab.className='addcol';ab.textContent='+';ab.title='Tambah kolom data';ab.setAttribute('aria-label','Tambah kolom data');ab.onclick=addColumn;
+  ad.appendChild(ab);h.appendChild(ad);
+  h.appendChild(document.createElement('th'));
   rows.forEach((r,ri)=>{
     const tr=T.insertRow();const n=tr.insertCell();n.className='n';n.textContent=ri+1;
-    D.forEach(e=>{const td=tr.insertCell();
-      if(e.type==='text'){const i=document.createElement('textarea');i.rows=1;i.className='cell';i.value=r[e.id]||'';const fit=()=>{i.style.height='auto';if(i.scrollHeight)i.style.height=Math.min(120,i.scrollHeight)+'px'};i.oninput=()=>{r[e.id]=i.value;cur=ri;nav();render();fit()};td.appendChild(i)}
+    C.forEach(e=>{const td=tr.insertCell();
+      if(xcols.includes(e)){const i=document.createElement('textarea');i.rows=1;i.className='cell';i.placeholder=e.name;i.value=r[e.id]||'';i.oninput=()=>{r[e.id]=i.value;cur=ri;nav()};td.appendChild(i)}
+      else if(e.type==='text'){const i=document.createElement('textarea');i.rows=1;i.className='cell';i.value=r[e.id]||'';const fit=()=>{i.style.height='auto';if(i.scrollHeight)i.style.height=Math.min(120,i.scrollHeight)+'px'};i.oninput=()=>{r[e.id]=i.value;cur=ri;nav();render();fit()};td.appendChild(i)}
       else{const w=document.createElement('div');w.className='ph';if(r[e.id]){const im=new Image();im.src=r[e.id];w.appendChild(im)}
         const f=document.createElement('input');f.type='file';f.accept='image/*';f.onchange=()=>{const fr=new FileReader();fr.onload=()=>{r[e.id]=fr.result;if(r.__p)delete r.__p[e.id];cur=ri;nav();table();render()};f.files[0]&&fr.readAsDataURL(f.files[0])};w.appendChild(f);td.appendChild(w)}});
-    const x=tr.insertCell(),b=document.createElement('button');b.textContent='✕';b.className='btn danger';b.style.padding='4px 9px';b.onclick=()=>{rows.splice(ri,1);if(!rows.length)rows.push({});cur=Math.min(cur,rows.length-1);table();nav();render()};x.appendChild(b)})}
+    tr.insertCell();
+    const x=tr.insertCell(),b=document.createElement('button');b.textContent='✕';b.className='btn danger';b.style.padding='4px 9px';b.onclick=()=>{rows.splice(ri,1);if(!rows.length)rows.push({});cur=Math.min(cur,rows.length-1);table();nav();render()};x.appendChild(b);
+  });
+}
+/* Geser kolom seperti Excel: kolom yang ditekan terangkat & mengikuti jari,
+   kolom lain bergeser mulus memberi ruang, lalu kolom meluncur ke posisi baru */
+function startColDrag(ev,th,cid){
+  if(ev.target.closest('button,input,textarea'))return;
+  if(ev.pointerType==='mouse'&&ev.button!==0)return;
+  const sx=ev.clientX,sy=ev.clientY;
+  let active=false,settling=false,from=-1,n=0,cols=[],lefts=[],widths=[],newLeftOf=[],order=[],dx=0,dest=-1,idsOld=[];
+  const T=()=>$('#tbl');
+  const cleanupListeners=()=>{
+    window.removeEventListener('pointermove',move);
+    window.removeEventListener('pointerup',up);
+    window.removeEventListener('pointercancel',up);
+    document.body.classList.remove('col-dragging');
+  };
+  const clearVisual=()=>{
+    cols.forEach(els=>els.forEach(el=>{el.style.transform='';el.classList.remove('colmove','nt','lift')}));
+  };
+  const begin=()=>{
+    const tbl=T(),hr=tbl.rows[0];
+    idsOld=colOrder.slice();from=idsOld.indexOf(cid);n=idsOld.length;
+    if(from<0||!n)return false;
+    cols=[];
+    for(let i=0;i<n;i++){
+      const els=[hr.cells[i+1]];
+      for(let r=1;r<tbl.rows.length;r++){const c=tbl.rows[r].cells[i+1];if(c)els.push(c)}
+      cols.push(els);
+    }
+    const rects=cols.map(els=>els[0].getBoundingClientRect());
+    lefts=rects.map(r=>r.left);widths=rects.map(r=>r.width);
+    cols.forEach((els,i)=>els.forEach(el=>{el.classList.add('colmove');if(i===from){el.classList.add('lift','nt')}}));
+    document.body.classList.add('col-dragging');
+    if(navigator.vibrate)navigator.vibrate(10);
+    active=true;
+    return true;
+  };
+  // Hitung urutan baru dari posisi pusat kolom yang sedang diseret
+  const layout=()=>{
+    const cx=lefts[from]+widths[from]/2+dx;
+    const others=[...Array(n).keys()].filter(i=>i!==from);
+    const k=others.filter(j=>lefts[j]+widths[j]/2<cx).length;
+    const ord=others.slice();ord.splice(k,0,from);
+    let x=lefts[0];
+    newLeftOf=[];
+    ord.forEach(j=>{newLeftOf[j]=x;x+=widths[j]});
+    order=ord;dest=k;
+  };
+  const paint=()=>{
+    cols.forEach((els,i)=>{
+      const tx=i===from?dx:newLeftOf[i]-lefts[i];
+      const tf=i===from?`translateX(${tx}px) scale(1.02)`:`translateX(${tx}px)`;
+      els.forEach(el=>{el.style.transform=tf});
+    });
+  };
+  const move=e=>{
+    if(settling)return;
+    if(!active){
+      const ddx=e.clientX-sx,ddy=e.clientY-sy;
+      if(Math.abs(ddx)>4&&Math.abs(ddx)>Math.abs(ddy)){if(!begin())return}
+      else{if(Math.abs(ddy)>10){cleanupListeners()}return}
+    }
+    e.preventDefault();
+    dx=e.clientX-sx;
+    layout();
+    paint();
+  };
+  const up=()=>{
+    cleanupListeners();
+    if(!active||settling)return;
+    settling=true;
+    const moved=dest!==from;
+    const target=moved?newLeftOf[from]-lefts[from]:0;
+    const dragged=cols[from];
+    dragged.forEach(el=>el.classList.remove('nt'));
+    void dragged[0].offsetWidth;            // paksa reflow agar transisi berjalan dari posisi jari
+    dragged.forEach(el=>{el.style.transform=`translateX(${target}px)`});
+    setTimeout(()=>{
+      if(moved){
+        colOrder=order.map(j=>idsOld[j]);
+        clearVisual();
+        table();buildCp();
+      }else{
+        clearVisual();
+      }
+      active=false;settling=false;
+    },moved?260:200);
+  };
+  th.style.touchAction='pan-y';
+  window.addEventListener('pointermove',move,{passive:false});
+  window.addEventListener('pointerup',up);
+  window.addEventListener('pointercancel',up);
+}
 /* ===== Generate ===== */
 const gd=$('#gdlg');let gsel=new Set();
 const ext=()=>$('#fmt').value==='pdf'?'pdf':'jpg';
-const hasRow=i=>dynEls().some(e=>rows[i][e.id]);
+const hasRow=i=>[...dynEls(),...xcols].some(e=>rows[i][e.id]);
 function nameFor(i){
   const col=$('#fname').value,pre=$('#fpre').value.trim();let b=col&&col!=='#'?(rows[i][col]||''):'';
   b=b.replace(/\s+/g,' ');b=b.replace(/[\\/:*?"<>|\u0000-\u001f]+/g,'').replace(/\s+/g,' ').trim().slice(0,80);
@@ -774,8 +1075,8 @@ $('#gen').onclick=()=>{
   if(!els.length){toast('Tambahkan Dynamic Text/Foto dulu.');return}
   if(!rows.some((r,i)=>hasRow(i))){toast('Isi data dulu di Manage Data.');return}
   const F=$('#fname');F.innerHTML='<option value="#">Nomor urut</option>';
-  dynEls().filter(e=>e.type==='text').forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name;F.appendChild(o)});
-  const f1=dynEls().find(e=>e.type==='text');if(f1)F.value=f1.id;
+  allCols().filter(e=>e.type!=='photo').forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.name+(xcols.includes(e)?' (data)':'');F.appendChild(o)});
+  const f1=xcols[0]||dynEls().find(e=>e.type==='text');if(f1)F.value=f1.id;
   gsel=new Set(rows.map((r,i)=>i).filter(hasRow));glist();gd.showModal()};
 ['fmt','fname'].forEach(n=>$('#'+n).onchange=glist);$('#fpre').oninput=glist;
 $('#gclose').onclick=()=>gd.close();
@@ -785,26 +1086,37 @@ $('#gap').onclick=()=>{
   const n=new Set();$('#grange').value.split(/[,\s]+/).filter(Boolean).forEach(p=>{const m=p.match(/^(\d+)(?:-(\d+))?$/);if(!m)return;const a=+m[1],b=+(m[2]||m[1]);for(let q=Math.min(a,b);q<=Math.max(a,b);q++)if(q>=1&&q<=rows.length&&hasRow(q-1))n.add(q-1)});
   if(!n.size){toast('Nomor baris tidak valid.');return}gsel=n;glist()};
 function blobOf(c,type,q){return new Promise(r=>c.toBlob(r,type,q))}
+window.flazLoader={
+  open(){$('#genOv').classList.add('show');this.set(0,'Menyiapkan...')},
+  set(p,label){p=Math.max(0,Math.min(100,Math.round(p)));$('#genPct').textContent=p;$('#genFill').style.width=p+'%';if(label)$('#genLbl').textContent=label},
+  close(){const o=$('#genOv');setTimeout(()=>o.classList.remove('show'),500)}
+};
 $('#gdo').onclick=async()=>{
-  const btn=$('#gdo'),list=[...gsel].sort((a,b)=>a-b);if(!list.length)return;if(window.flazConfirm&&!(await window.flazConfirm(list.length)))return;btn.disabled=true;btn.classList.add('is-loading');
+  const btn=$('#gdo'),list=[...gsel].sort((a,b)=>a-b);if(!list.length)return;if(window.flazConfirm&&!(await window.flazConfirm(list.length)))return;btn.disabled=true;btn.classList.add('is-loading');flazLoader.open();
   try{
+    flazLoader.set(4,'Memuat gambar & font...');
     await Promise.all(list.flatMap(i=>dynEls().filter(e=>e.type==='photo'&&rows[i][e.id]).map(e=>loadImg(rows[i][e.id]))));
     await document.fonts.ready;
+    flazLoader.set(10,'Menyiapkan halaman...');
     const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d'),fmt=$('#fmt').value,used={};
     const uniq=i=>{const n=nameFor(i);used[n]=(used[n]||0)+1;return used[n]>1?n+' ('+used[n]+')':n};
     const newPdf=()=>new window.jspdf.jsPDF({orientation:W>=H?'l':'p',unit:'px',format:[W,H],compress:true,hotfixes:['px_scaling']});
     let blob,name;
     if(fmt==='pdf'&&$('#gmerge').checked){
-      const pdf=newPdf();list.forEach((i,k)=>{draw(g,W,H,i,false);if(k)pdf.addPage([W,H],W>=H?'l':'p');pdf.addImage(c.toDataURL('image/jpeg',.92),'JPEG',0,0,W,H)});
+      const pdf=newPdf();list.forEach((i,k)=>{draw(g,W,H,i,false);flazLoader.set(10+Math.round((k+1)/list.length*80),'Menggabungkan '+(k+1)+' dari '+list.length+' sertifikat...');if(k)pdf.addPage([W,H],W>=H?'l':'p');pdf.addImage(c.toDataURL('image/jpeg',.92),'JPEG',0,0,W,H)});
       blob=pdf.output('blob');name='flaz-sertifikat.pdf'
     }else{
       const files=[];
-      for(const i of list){draw(g,W,H,i,false);const n=uniq(i);
+      let kk=0;
+      for(const i of list){draw(g,W,H,i,false);const n=uniq(i);kk++;flazLoader.set(10+Math.round(kk/list.length*80),'Membuat sertifikat '+kk+' dari '+list.length+'...');
         if(fmt==='pdf'){const pdf=newPdf();pdf.addImage(c.toDataURL('image/jpeg',.92),'JPEG',0,0,W,H);files.push([n+'.pdf',pdf.output('blob')])}
         else files.push([n+'.jpg',await blobOf(c,'image/jpeg',.92)])}
       if(files.length===1){name=files[0][0];blob=files[0][1]}
       else{const z=new JSZip();files.forEach(f=>z.file(f[0],f[1]));blob=await z.generateAsync({type:'blob'});name='flaz-sertifikat.zip'}}
-    if(window.flazSpend)await window.flazSpend(list.length);
+    const names=list.map(i=>nameFor(i));
+    flazLoader.set(92,'Memotong Flazz Coin & menyimpan riwayat...');
+    if(window.flazSpend)await window.flazSpend(list.length,{format:fmt,names,merged:fmt==='pdf'&&$('#gmerge').checked});
+    flazLoader.set(100,'Selesai! Mengunduh file...');
     const url=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),10000);
@@ -817,7 +1129,7 @@ $('#gdo').onclick=async()=>{
       :'Gagal membuat sertifikat. Lihat konsol (F12) untuk detail.';
     $('#gc').textContent=msg;$('#gc').style.color='#c92a2a';
   }
-  finally{btn.disabled=!gsel.size;btn.classList.remove('is-loading')}};
+  finally{btn.disabled=!gsel.size;btn.classList.remove('is-loading');flazLoader.close()}};
 
 
 
@@ -870,7 +1182,7 @@ function applyCol(e,raw){
   table();nav();render();toast(L.length+' baris ditempel ke "'+e.name+'" (baris '+start+'–'+(start+L.length-1)+').')}
 function buildCp(){
   const B=$('#cp');B.innerHTML='';
-  dynEls().filter(e=>e.type==='text').forEach(e=>{
+  allCols().filter(e=>e.type!=='photo').forEach(e=>{
     const d=document.createElement('div');d.className='cpc';
     const t=document.createElement('b');t.textContent=e.name;
     const ta=document.createElement('textarea');ta.rows=4;ta.placeholder='Tempel satu kolom dari Excel di sini. Baris ke-1 masuk ke baris ke-1 tabel, dst.';
@@ -1321,10 +1633,15 @@ useSample();
   const acct = $('#acct'), acctTrigger = $('#acctTrigger');
   let coins = 0;
   // Dipanggil editor saat generate: memotong Flazz Coin di server
-  window.flazSpend = async n => {
+  window.flazSpend = async (n, meta = {}) => {
     if (!sb) throw new Error('NOT_CONFIGURED');
     const before = coins;
-    const { data, error } = await sb.rpc('spend_coins', { p_amount: n });
+    const { data, error } = await sb.rpc('record_generate', {
+      p_count: n,
+      p_format: meta.format || 'pdf',
+      p_names: (meta.names || []).slice(0, 1000),
+      p_merged: !!meta.merged
+    });
     if (error) throw error;
     coins = data;
     showSpendResult(before, data, n);
@@ -1453,6 +1770,7 @@ useSample();
     $('#resDelta').textContent = '-' + n.toLocaleString('id-ID') + ' Coin';
     const d = $('#resDlg');
     $('#resOk').onclick = () => d.close();
+    d.onclose = () => { d.onclose = null; openHistory(true); };
     d.showModal();
     countTo($('#resTo'), from, to, 1000);
     countTo($('#apCoins'), from, to, 1000);
@@ -1530,8 +1848,47 @@ useSample();
     s.style.top = (e.clientY - r.top - size / 2) + 'px';
     b.classList.add('rip-host');
     b.appendChild(s);
-    s.addEventListener('animationend', () => s.remove());
+    s.addEventListener('animationend', () => { s.remove(); if (!b.querySelector('.ripple')) b.classList.remove('rip-host'); });
   }, { passive: true });
+
+  // ===== Riwayat generate =====
+  const fmtDate = iso => new Date(iso).toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  function openHistory(flash){
+    const d = $('#histDlg');
+    if (!d.open) d.showModal();
+    loadHistory(!!flash);
+  }
+  async function loadHistory(flash){
+    const list = $('#histList');
+    list.innerHTML = '<p class="hist-empty">Memuat riwayat...</p>';
+    if (!sb || !uid) { list.innerHTML = '<p class="hist-empty">Silakan masuk terlebih dahulu.</p>'; return; }
+    const { data, error } = await sb.from('generate_history')
+      .select('created_at,format,file_count,coins_spent,balance_after,merged,file_names')
+      .order('created_at', { ascending: false }).limit(200);
+    if (error) { list.innerHTML = '<p class="hist-empty" style="color:#ff6b6b">Gagal memuat riwayat: ' + esc(error.message) + '</p>'; return; }
+    const rows = data || [];
+    const certs = rows.reduce((a, r) => a + r.file_count, 0);
+    const spent = rows.reduce((a, r) => a + r.coins_spent, 0);
+    $('#hsCert').textContent = certs.toLocaleString('id-ID');
+    $('#hsCoin').textContent = spent.toLocaleString('id-ID');
+    $('#hsRp').textContent = 'Rp' + (spent * 1500).toLocaleString('id-ID');
+    if (!rows.length) { list.innerHTML = '<p class="hist-empty">Belum ada sertifikat yang dibuat.<br>Riwayat akan muncul setelah kamu generate.</p>'; return; }
+    list.innerHTML = '';
+    rows.forEach((r, i) => {
+      const names = r.file_names || [];
+      const el = document.createElement('div');
+      el.className = 'hist-item' + (flash && i === 0 ? ' flash' : '');
+      el.innerHTML =
+        `<div class="hi-top"><div><b class="hi-date">${esc(fmtDate(r.created_at))}</b><span class="hi-fmt">${esc(String(r.format).toUpperCase())}${r.merged ? ' · 1 PDF' : ''}</span></div>` +
+        `<div class="hi-cost">-${Number(r.coins_spent).toLocaleString('id-ID')} Coin</div></div>` +
+        `<div class="hi-meta"><span><b>${r.file_count}</b> sertifikat</span><span>Biaya ≈ <b>Rp${(r.coins_spent * 1500).toLocaleString('id-ID')}</b></span><span>Saldo sesudah <b>${Number(r.balance_after).toLocaleString('id-ID')}</b></span></div>` +
+        (names.length ? `<details class="hi-files"><summary>Lihat ${names.length} nama file</summary><ul>${names.map(n => `<li>${esc(n)}</li>`).join('')}</ul></details>` : '');
+      list.appendChild(el);
+    });
+    if (flash) list.scrollTop = 0;
+  }
+  $('#apHist').addEventListener('click', () => openHistory(false));
+  $('#histClose').addEventListener('click', () => $('#histDlg').close());
 
   // Pulihkan sesi jika pengguna sudah login sebelumnya
   if (sb) {
