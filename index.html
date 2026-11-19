@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- CertiFlazz v2.1.0 | lihat CHANGELOG.md -->
 <html lang="id">
 <head>
 <meta charset="utf-8">
@@ -671,6 +672,7 @@ dialog.tp p{color:#b5b5b5;font-size:13px;margin:4px 0 0}
 .tp-copy.done{background:#7CFC9A}
 .tp-copy.done .ic-copy{opacity:0;transform:scale(.4) rotate(-20deg)}
 .tp-copy.done .ic-ok{opacity:1;transform:scale(1)}
+.ap-ver{margin:0;text-align:center;font-size:11px;color:#777;letter-spacing:.3px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2232%22%20fill%3D%22%230b0b0b%22/%3E%3Cpath%20d%3D%22M35%208%2016%2036h12l-3%2020%2019-28H32z%22%20fill%3D%22%23FFD500%22/%3E%3C/svg%3E">
@@ -761,6 +763,7 @@ dialog.tp p{color:#b5b5b5;font-size:13px;margin:4px 0 0}
             <button type="submit" id="rdBtn">Tukar</button>
           </form>
           <p id="rdMsg"></p>
+        <p class="ap-ver">CertiFlazz v2.1.0</p>
         </div>
       </div>
     </div>
@@ -1387,7 +1390,8 @@ $('#gdo').onclick=async()=>{
     const work=(async()=>{
       await Promise.all(list.flatMap(i=>dynEls().filter(e=>e.type==='photo'&&rows[i][e.id]).map(e=>loadImg(rows[i][e.id]))));
       await document.fonts.ready;
-      const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+      const S=Math.max(1,Math.min(3,4000/Math.max(W,H)));const CW=Math.round(W*S),CH=Math.round(H*S);
+      const c=document.createElement('canvas');c.width=CW;c.height=CH;const g=c.getContext('2d');g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';
       fmt=$('#fmt').value;merged=fmt==='pdf'&&$('#gmerge').checked;
       const used={};
       const uniq=i=>{const nm=nameFor(i);used[nm]=(used[nm]||0)+1;return used[nm]>1?nm+' ('+used[nm]+')':nm};
@@ -1395,15 +1399,15 @@ $('#gdo').onclick=async()=>{
       names=list.map(i=>nameFor(i));
       if(merged){
         const pdf=newPdf();
-        list.forEach((i,k)=>{draw(g,W,H,i,false);flazLoader.label('Menggabungkan '+(k+1)+' dari '+n+': '+names[k]);if(k)pdf.addPage([W,H],W>=H?'l':'p');pdf.addImage(c.toDataURL('image/jpeg',.92),'JPEG',0,0,W,H)});
+        list.forEach((i,k)=>{draw(g,CW,CH,i,false);flazLoader.label('Menggabungkan '+(k+1)+' dari '+n+': '+names[k]);if(k)pdf.addPage([W,H],W>=H?'l':'p');pdf.addImage(c.toDataURL('image/jpeg',.95),'JPEG',0,0,W,H)});
         blob=pdf.output('blob');name='flaz-sertifikat.pdf';
       }else{
         const files=[];
         for(let k=0;k<list.length;k++){
-          const i=list[k];draw(g,W,H,i,false);const nm=uniq(i);
+          const i=list[k];draw(g,CW,CH,i,false);const nm=uniq(i);
           flazLoader.label('Membuat sertifikat '+(k+1)+' dari '+n+': '+names[k]);
-          if(fmt==='pdf'){const pdf=newPdf();pdf.addImage(c.toDataURL('image/jpeg',.92),'JPEG',0,0,W,H);files.push([nm+'.pdf',pdf.output('blob')])}
-          else files.push([nm+'.jpg',await blobOf(c,'image/jpeg',.92)]);
+          if(fmt==='pdf'){const pdf=newPdf();pdf.addImage(c.toDataURL('image/jpeg',.95),'JPEG',0,0,W,H);files.push([nm+'.pdf',pdf.output('blob')])}
+          else files.push([nm+'.jpg',await blobOf(c,'image/jpeg',.95)]);
         }
         if(files.length===1){name=files[0][0];blob=files[0][1]}
         else{const z=new JSZip();files.forEach(f=>z.file(f[0],f[1]));blob=await z.generateAsync({type:'blob'});name='flaz-sertifikat.zip'}
@@ -1457,7 +1461,7 @@ function syncP(){
     set('w',`${(e.w*100).toFixed(1)}% · ${Math.round(e.w*W)}px`,e.w*100);
     set('h',`${(h*100).toFixed(1)}% · ${Math.round(h*W)}px`,h*100);
     set('r',`${Math.round((e.r||0)*100)}%`,(e.r||0)*100)}
-  else{const f=eff(e);set('fs',`${(f.fs*100).toFixed(1)}% · ${Math.round(f.fs*W)}px`,f.fs*100);set('bw',f.bw>0?`${Math.round(f.bw*100)}% · ${Math.round(f.bw*W)}px`:'Mati',(f.bw||0)*100)}}
+  else{const f=eff(e);set('fs',`${(f.fs*100).toFixed(1)}% · ${Math.round(f.fs*W)}px`,f.fs*100);set('bw',f.bw>0?`${Math.round(f.bw*100)}% · ${Math.round(f.bw*W)}px`:'Mati',(f.bw||0)*100);set('bh',f.bh>0?`${Math.round(f.bh*100)}% · ${Math.round(f.bh*H)}px`:'Mati',(f.bh||0)*100)}}
 
 /* ===== Edit teks langsung (klik 2x) ===== */
 let ie=null;
@@ -1538,14 +1542,35 @@ function setAlign(e,al){
   if(e.dyn===false||scopeAll){hist();e.align=al;e.x=nx;rows.forEach(r=>{if(r.__o&&r.__o[e.id]){delete r.__o[e.id].align;delete r.__o[e.id].ox}})}
   else ovr(e,cur,{align:al,ox:nx-e.x});
   props();render();if(ie)placeInl()}
+function safeW(e,w){
+  if(e.bw>0)return e.bw*w;                       // safezone manual (slider "Safezone")
+  const x=e.x*w,m=.03*w;let a;                   // safezone otomatis: sisa ruang sampai tepi template
+  if(e.align==='center')a=2*Math.min(x,w-x)-2*m;
+  else if(e.align==='right')a=x-m;
+  else a=w-x-m;
+  return Math.max(a,.15*w);
+}
 function lines(e,t,c,w){
-  const out=[];
-  for(const p of String(t).split('\n')){
-    if(!(e.bw>0)){out.push(p);continue}
-    const max=e.bw*w;let line='';
-    for(const wd of p.split(' ')){const test=line?line+' '+wd:wd;if(line&&c.measureText(test).width>max){out.push(line);line=wd}else line=test}
-    out.push(line)}
+  const out=[],max=safeW(e,w);
+  for(const p0 of String(t).split('\n')){
+    for(const p of [p0]){
+      let line='';
+      for(const wd of p.split(' ')){const test=line?line+' '+wd:wd;if(line&&c.measureText(test).width>max){out.push(line);line=wd}else line=test}
+      out.push(line);
+    }
+  }
   return out}
+function fitPx(e,t,c,w,h){
+  let px=e.fs*w;const max=safeW(e,w),maxH=(e.bh>0&&h)?e.bh*h:Infinity;
+  for(let i=0;i<12;i++){
+    c.font=`${e.bold?700:400} ${px}px ${fam(e.font)}`;
+    const L=lines(e,t,c,w);
+    let mx=0;L.forEach(s=>{mx=Math.max(mx,c.measureText(s||' ').width)});
+    if((mx<=max&&L.length*px*1.25<=maxH)||px<=w*.012)break;
+    px*=.92;
+  }
+  return px;
+}
 function tb(e0,c){
   const e=eff(e0),px=e.fs*W;c.font=`${e.bold?700:400} ${px}px ${fam(e.font)}`;
   const L=lines(e,txtOf(e0)||' ',c,W),lh=px*1.25;let w=0;L.forEach(s=>{w=Math.max(w,c.measureText(s||' ').width)});if(e.bw>0)w=e.bw*W;
@@ -1557,9 +1582,10 @@ function draw(c,w,h,ri,ui){
   for(const e of els){
     if(e.type==='text'){
       const ef=eff(e,ri),v=txtOf(e,ri,ui);if(!v)continue;
-      const px=ef.fs*w;c.font=`${ef.bold?700:400} ${px}px ${fam(ef.font)}`;c.fillStyle=ef.color;c.textAlign=ef.align;c.textBaseline='middle';
+      const px=fitPx(ef,v,c,w,h);c.font=`${ef.bold?700:400} ${px}px ${fam(ef.font)}`;c.fillStyle=ef.color;c.textAlign=ef.align;c.textBaseline='middle';
       const L=lines(ef,v,c,w),lh=px*1.25,y0=ef.y*h-L.length*lh/2+lh/2;
-      L.forEach((s,i)=>c.fillText(s,ef.x*w,y0+i*lh));
+      if(ui&&e.id===sel){const mx=safeW(ef,w),mh=ef.bh>0?ef.bh*h:L.length*lh+lh*.6,bx=ef.align==='center'?ef.x*w-mx/2:ef.align==='right'?ef.x*w-mx:ef.x*w;c.save();c.setLineDash([8,6]);c.strokeStyle='#FFD50C';c.lineWidth=Math.max(2,w/400);c.strokeRect(bx,ef.y*h-mh/2,mx,mh);c.restore()}
+      if(!(ui&&ie&&ie.mode!=='name'&&ie.e.id===e.id))L.forEach((s,i)=>c.fillText(s,ef.x*w,y0+i*lh));
     }else{
       const sw=e.w*w,sh=(e.h||e.w)*w,x=e.x*w-sw/2,y=e.y*h-sh/2,rad=(e.r||0)*Math.min(sw,sh)/2,u=(rows[ri]||{})[e.id],im=u&&(ui?getImg(u):imgs.get(u));
       if(im){const tf=ptf(ri,e.id),iw=im.naturalWidth,ih=im.naturalHeight,sc=covS(iw,ih,sw,sh,tf.r)*tf.z;c.save();rr(c,x,y,sw,sh,rad);c.clip();c.translate(x+sw/2+tf.x*sw,y+sh/2+tf.y*sh);c.rotate(tf.r*Math.PI/180);c.scale(tf.f?-sc:sc,sc);c.drawImage(im,-iw/2,-ih/2);c.restore()}
@@ -1581,22 +1607,29 @@ function buildTb(){
     [['all','Semua data'],['row','Baris ini']].forEach(([k,l])=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.className=(scopeAll===(k==='all'))?'on':'';b.onclick=()=>{scopeAll=k==='all';buildTb();props()};tbx.appendChild(b)})}
   const ok=document.createElement('button');ok.type='button';ok.textContent='Simpan';ok.title='Ctrl+Enter';ok.onclick=()=>closeInline(true);tbx.appendChild(ok)}
 function placeInl(){
-  if(!ie)return;const {ta,tbx,e}=ie,cw=cv.getBoundingClientRect().width,k=cw/W,b=tb(e,ctx),ef=eff(e);
-  const L=ta.value.split('\n'),px=ef.fs*W*k,lh=px*1.25;
-  ctx.save();ctx.font=`${ef.bold?700:400} ${ef.fs*W}px ${fam(ef.font)}`;let mw=0;L.forEach(s=>{mw=Math.max(mw,ctx.measureText(s||' ').width)});ctx.restore();
-  const wd=Math.min(cw,Math.max(Math.max(mw,b.w)*k+56,160)),ax=ef.x*W*k,hh=Math.max(L.length,1)*lh+10;
-  let left=ef.align==='center'?ax-wd/2:ef.align==='right'?ax-wd+8:ax-8;left=Math.max(0,Math.min(left,cw-wd));
-  const top=ef.y*H*k-hh/2;
-  Object.assign(ta.style,{font:`${ef.bold?700:400} ${px}px ${fam(ef.font)}`,lineHeight:lh+'px',width:wd+'px',height:hh+'px',left:left+'px',top:top+'px',textAlign:ef.align,color:ef.color,background:lum(ef.color)>150?'#222':'#fff',overflow:'hidden',whiteSpace:'pre',resize:'none',padding:'4px 6px'});
-  const ty=top-44;tbx.style.left=Math.max(0,Math.min(left,cw-tbx.offsetWidth))+'px';tbx.style.top=(ty<0?top+hh+8:ty)+'px'}
+  if(!ie)return;const {ta,tbx,e}=ie,cw=cv.getBoundingClientRect().width,k=cw/W,ef=eff(e);
+  const raw=ta.value.length?ta.value:' ';
+  ctx.save();
+  const px=fitPx(ef,raw,ctx,W,H);                       // ukuran font sama persis dengan sertifikat
+  ctx.font=`${ef.bold?700:400} ${px}px ${fam(ef.font)}`;
+  const L=lines(ef,raw,ctx,W),lh=px*1.25;
+  ctx.restore();
+  const mx=safeW(ef,W),blockH=Math.max(L.length,1)*lh;
+  const cx=ef.x*W,cy=ef.y*H;
+  const bx=ef.align==='center'?cx-mx/2:ef.align==='right'?cx-mx:cx;
+  const left=bx*k,top=(cy-blockH/2)*k,wpx=mx*k,hpx=blockH*k;
+  Object.assign(ta.style,{font:`${ef.bold?700:400} ${px*k}px ${fam(ef.font)}`,lineHeight:(lh*k)+'px',width:wpx+'px',height:Math.max(hpx,lh*k)+'px',left:left+'px',top:top+'px',textAlign:ef.align,color:ef.color,background:'transparent',border:'1px dashed #FFD50C',outline:'none',overflow:'auto',whiteSpace:'pre-wrap',wordBreak:'break-word',resize:'none',padding:'0 2px',boxSizing:'border-box',margin:0,caretColor:ef.color});
+  const under=top+Math.max(hpx,lh*k)+8;
+  tbx.style.left=Math.max(0,Math.min(left,cw-tbx.offsetWidth))+'px';tbx.style.top=under+'px';
+}
 function editInline(e){
   closeInline(false);
   const mode=e.dyn===false?'text':((rows[cur]||{})[e.id]?'val':'name');
-  const ta=document.createElement('textarea');ta.className='inl';ta.wrap='off';ta.spellcheck=false;
+  const ta=document.createElement('textarea');ta.className='inl';ta.wrap='soft';ta.spellcheck=false;
   ta.value=mode==='text'?(e.text||''):mode==='val'?rows[cur][e.id]:e.name;
   ta.title=mode==='name'?'Mengubah nama kolom':'Enter = baris baru, Ctrl+Enter = simpan';
   const tbx=document.createElement('div');tbx.className='inltb';tbx.onmousedown=ev=>ev.preventDefault();
-  ie={ta,tbx,e,mode};cv.parentElement.append(ta,tbx);buildTb();placeInl();ta.focus();ta.select();
+  ie={ta,tbx,e,mode};cv.parentElement.append(ta,tbx);buildTb();placeInl();render();ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);
   ta.oninput=placeInl;
   ta.onkeydown=ev=>{ev.stopPropagation();if(ev.key==='Escape'){ev.preventDefault();closeInline(false)}else if(ev.key==='Enter'&&(ev.ctrlKey||ev.metaKey||mode==='name')){ev.preventDefault();closeInline(true)}};
   ta.onblur=()=>closeInline(true)}
@@ -1621,7 +1654,7 @@ function props(){
     body=scopeHTML(e)+
     acc(0,'teks','text','Teks',`<label>Jenis<select id="p-kind"><option value="1">Dynamic (dari data)</option><option value="0">Static (teks tetap)</option></select></label>${st?'<label>Isi teks (Enter = baris baru)<textarea id="p-text" rows="3"></textarea></label>':'<label>Nama kolom data<input type="text" id="p-name"></label>'}`)+
     acc(1,'font','font','Font',`<label>Font<select id="p-font">${FONTS.map(f=>`<option value="${f[0]}"${f[0]===e.font?' selected':''}>${f[1]}</option>`).join('')}</select></label><button class="btn ghost" id="p-upf" style="justify-content:center">Upload font (.ttf / .otf)</button><input type="file" id="p-ff" accept=".ttf,.otf,.woff,.woff2" hidden>`)+
-    acc(2,'ukuran','size','Ukuran & kotak',`<label><span class="lr">Ukuran<b id="v-fs"></b></span><input type="range" id="p-fs" min="1" max="15" step=".05" value="${ef.fs*100}"></label><label><span class="lr">Lebar kotak teks<b id="v-bw"></b></span><input type="range" id="p-bw" min="0" max="100" step="1" value="${(ef.bw||0)*100}"></label><button class="btn ghost" id="p-fit" style="justify-content:center">Turun baris otomatis agar muat</button>`)+
+    acc(2,'ukuran','size','Ukuran & kotak',`<label><span class="lr">Ukuran<b id="v-fs"></b></span><input type="range" id="p-fs" min="1" max="15" step=".05" value="${ef.fs*100}"></label><label><span class="lr">Safezone teks (lebar)<b id="v-bw"></b></span><input type="range" id="p-bw" min="0" max="100" step="1" value="${(ef.bw||0)*100}"></label><label><span class="lr">Safezone tinggi<b id="v-bh"></b></span><input type="range" id="p-bh" min="0" max="100" step="1" value="${(ef.bh||0)*100}"></label><button class="btn ghost" id="p-fit" style="justify-content:center">Turun baris otomatis agar muat</button>`)+
     acc(3,'warna','color','Warna teks',`<div class="colrow"><input type="color" id="p-col" value="${ef.color}"><input type="text" id="p-hex" maxlength="7" value="${ef.color}" aria-label="Kode warna hex"></div><div class="sw" id="p-sw">${SW}</div><button class="btn ghost" id="p-pick" style="justify-content:center">Ambil warna dari template</button>`)+
     acc(4,'rata','align','Rata & gaya',`<div class="lbl">Rata teks</div><div class="seg" id="p-al-g">${['left','center','right'].map(a=>`<button type="button" data-a="${a}" title="Rata ${a}" class="${ef.align===a?'on':''}">${AL[a]}</button>`).join('')}</div><label>Gaya<select id="p-b"><option value="0">Normal</option><option value="1">Tebal</option></select></label>`);
   }else{
@@ -1643,6 +1676,7 @@ function props(){
     $('#p-upf').onclick=()=>$('#p-ff').click();$('#p-ff').onchange=async ev=>{const f=ev.target.files[0];if(!f)return;const nm=await loadFontFile(f);if(nm){hist();e.font=nm;props();render()}};
     $('#p-fs').oninput=ev=>setStyle(e,'fs',ev.target.value/100);
     $('#p-bw').oninput=ev=>setStyle(e,'bw',ev.target.value/100);
+    $('#p-bh').oninput=ev=>setStyle(e,'bh',ev.target.value/100);
     $('#p-fit').onclick=()=>{const x=ef.x,w=ef.align==='center'?2*Math.min(x,1-x)-.06:ef.align==='left'?1-x-.05:x-.05;if(scopeAll||st)hist();setStyle(e,'bw',Math.max(.1,Math.min(.95,w)));props()};
     $('#p-col').oninput=ev=>{setStyle(e,'color',ev.target.value);$('#p-hex').value=ev.target.value};
     $('#p-hex').oninput=ev=>{const h=normHex(ev.target.value);if(h){setStyle(e,'color',h);$('#p-col').value=h}};
