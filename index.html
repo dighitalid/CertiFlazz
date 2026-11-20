@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- CertiFlazz v2.1.0 | lihat CHANGELOG.md -->
+<!-- CertiFlazz v2.2.1 | lihat CHANGELOG.md -->
 <html lang="id">
 <head>
 <meta charset="utf-8">
@@ -673,8 +673,32 @@ dialog.tp p{color:#b5b5b5;font-size:13px;margin:4px 0 0}
 .tp-copy.done .ic-copy{opacity:0;transform:scale(.4) rotate(-20deg)}
 .tp-copy.done .ic-ok{opacity:1;transform:scale(1)}
 .ap-ver{margin:0;text-align:center;font-size:11px;color:#777;letter-spacing:.3px}
+
+/* ===== v2.2.0 ===== */
+.nb2{font-size:12px!important;padding:6px 10px!important}
+#layers{margin:0 0 14px;padding:12px;border-radius:18px;background:#f4f4f4;color:#0b0b0b}
+#layers .lyh{font-weight:700;font-size:13px;margin-bottom:8px}
+#layers .lyh small{font-weight:400;color:#777;font-size:11px;margin-left:4px}
+.lyr{display:flex;align-items:center;gap:4px;padding:5px 6px;border-radius:12px;background:#fff;margin-bottom:5px;border:1.5px solid transparent;cursor:pointer;transition:border-color .2s,background-color .2s}
+.lyr:hover{border-color:#FFE066}
+.lyr.on{border-color:#FFD50C;background:#FFF6C7}
+.lyr .lyt{width:20px;text-align:center;font-weight:700;font-size:12px}
+.lyr .lyn{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lyr.lk .lyn{color:#999}
+.lyr button{background:#0b0b0b;color:#FFD50C;border:0;border-radius:8px;width:26px;height:26px;cursor:pointer;font-size:12px;padding:0;flex:0 0 26px}
+.lyr button:active{transform:scale(.9)}
+.ap-ver{margin:0;text-align:center;font-size:11px;color:#777}
+
+/* ===== v2.2.1: sel foto di tabel ===== */
+#dlg .tw.dropOn{box-shadow:0 0 0 3px #FFD50C;background:#fffbea}
+#dlg td .ph{position:relative;min-width:110px;min-height:72px;display:flex;align-items:center;justify-content:center;border:1.5px dashed #cfcfcf;border-radius:14px;background:#fafafa;overflow:hidden;transition:border-color .2s,background-color .2s}
+#dlg td .ph:hover{border-color:#FFD50C;background:#fffbea}
+#dlg td .ph img{max-width:100%;max-height:96px;object-fit:contain;display:block}
+#dlg td .ph input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+#dlg td .ph:not(:has(img))::before{content:'Tarik foto ke sini atau klik';font-size:11px;color:#888;text-align:center;padding:6px;pointer-events:none}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2232%22%20fill%3D%22%230b0b0b%22/%3E%3Cpath%20d%3D%22M35%208%2016%2036h12l-3%2020%2019-28H32z%22%20fill%3D%22%23FFD500%22/%3E%3C/svg%3E">
 </head>
 <body>
@@ -763,7 +787,7 @@ dialog.tp p{color:#b5b5b5;font-size:13px;margin:4px 0 0}
             <button type="submit" id="rdBtn">Tukar</button>
           </form>
           <p id="rdMsg"></p>
-        <p class="ap-ver">CertiFlazz v2.1.0</p>
+        <p class="ap-ver">CertiFlazz v2.2.1</p>
         </div>
       </div>
     </div>
@@ -807,7 +831,7 @@ dialog.tp p{color:#b5b5b5;font-size:13px;margin:4px 0 0}
  </aside>
  <section class="stage" id="stage">
   <div class="zv" id="zv"><div class="cwrap" id="cw"><canvas id="cv"></canvas></div></div>
-  <div class="nav"><button id="prev" aria-label="Sebelumnya">◀</button><span id="rl">Pratinjau baris 1/1</span><button id="next" aria-label="Berikutnya">▶</button><span class="nsep"></span><button id="zo" aria-label="Perkecil" title="Perkecil (Ctrl+scroll)">−</button><span id="zl" title="Klik untuk kembali ke 100%" style="cursor:pointer;min-width:46px;text-align:center">100%</span><button id="zi" aria-label="Perbesar" title="Perbesar (Ctrl+scroll)">+</button></div>
+  <div class="nav"><button id="prev" aria-label="Sebelumnya">◀</button><span id="rl">Pratinjau baris 1/1</span><button id="next" aria-label="Berikutnya">▶</button><button id="longest" class="nb2" title="Lompat ke baris dengan teks terpanjang">Teks terpanjang</button><span class="nsep"></span><button id="saveL" class="nb2" title="Simpan proyek ke file .flazz">Simpan</button><button id="loadL" class="nb2" title="Muat proyek dari file .flazz">Muat</button><button id="cloudSave" class="nb2" title="Simpan proyek ke cloud">Simpan cloud</button><button id="cloudLoad" class="nb2" title="Buka proyek dari cloud">Buka cloud</button><input type="file" id="loadFile" accept=".flazz,.json" hidden><span class="nsep"></span><button id="zo" aria-label="Perkecil" title="Perkecil (Ctrl+scroll)">−</button><span id="zl" title="Klik untuk kembali ke 100%" style="cursor:pointer;min-width:46px;text-align:center">100%</span><button id="zi" aria-label="Perbesar" title="Perbesar (Ctrl+scroll)">+</button></div>
   <div class="hint" id="hint">Pilih tool Dynamic Text di kiri, lalu klik pada sertifikat. Seret elemen untuk memindahkan.</div>
   <div class="hint keys">Klik 2x bingkai foto untuk zoom/putar foto. Klik 2x pada teks untuk mengedit langsung (<b>Enter</b> = baris baru, <b>Ctrl+Enter</b> = simpan, <b>Esc</b> = batal).<br>Dynamic Foto: tarik titik putih di sudut/sisi untuk ubah ukuran (<b>Shift</b> = proporsional, <b>Alt</b> = dari tengah); tarik tombol ◜ di dalam sudut kiri atas untuk membulatkan.<br>Pintasan: <b>Ctrl+Z</b> urungkan · <b>Ctrl+Y</b> ulangi · <b>Delete/Backspace</b> hapus · <b>Ctrl+D</b> gandakan · <b>Ctrl+C / V</b> salin &amp; tempel · <b>Panah</b> geser (Shift = jauh) · <b>V T S F</b> ganti tool · <b>Esc</b> batal · <b>Ctrl+scroll</b> zoom preview</div>
  </section>
@@ -826,6 +850,7 @@ dialog.tp p{color:#b5b5b5;font-size:13px;margin:4px 0 0}
  <div class="row" style="align-items:center"><h3 style="flex:1">Manage Data</h3><button class="btn ghost" id="dclose" style="flex:0">Selesai</button></div>
  <div class="tw"><table id="tbl"></table></div>
  <button class="btn ghost addrow" id="addr" type="button"><span class="plus">+</span> Baris</button>
+ <div class="row" style="margin-top:8px;gap:8px"><button class="btn ghost" id="impBtn" type="button">Impor Excel / CSV</button><button class="btn ghost" id="bulkBtn" type="button">Upload foto massal</button><input type="file" id="impFile" accept=".xlsx,.xls,.csv" hidden><input type="file" id="bulkFile" accept="image/*" multiple hidden></div>
  <div class="row" style="align-items:center;margin-top:4px"><h3 style="flex:1;color:#000;text-transform:none;font-size:14px;letter-spacing:0">Tempel per kolom dari Excel</h3><label style="flex:0 0 auto;flex-direction:row;align-items:center;gap:6px">Mulai dari baris <input type="text" id="cpstart" value="1" style="width:56px;text-align:center" inputmode="numeric"></label></div>
  <div id="cp" class="cpg"></div>
  <details style="margin-top:8px"><summary style="cursor:pointer;font-size:12px;color:#555">Tempel banyak kolom sekaligus (dipisah tab)</summary><textarea id="paste" rows="3" style="margin-top:6px" placeholder="Budi Santoso&#9;Juara 1&#10;Siti Aminah&#9;Juara 2"></textarea></details>
@@ -973,12 +998,12 @@ cv.addEventListener('pointerdown',ev=>{
   const p=pt(ev);if(pickFor){pickColor(p);return}
   if(tool==='scan'){scanStart(ev);return}
   if(tool!=='select'){hist();const e=addEl(tool,p.x/W,p.y/H);setTool('select');props();render();dataSync();return}
-  const hh=handleAt(p);if(hh){const se=els.find(a=>a.id===sel);drag={hd:hh,id:sel,pre:JSON.stringify(els),b0:pb(se)};cv.setPointerCapture(ev.pointerId);return}
+  const hh=handleAt(p);if(hh&&!els.find(a=>a.id===sel&&a.lock)){const se=els.find(a=>a.id===sel);drag={hd:hh,id:sel,pre:JSON.stringify(els),b0:pb(se)};cv.setPointerCapture(ev.pointerId);return}
   let hit=null;for(let i=els.length-1;i>=0;i--){const b=bounds(els[i]);if(p.x>=b.l-8&&p.x<=b.l+b.w+8&&p.y>=b.t-8&&p.y<=b.t+b.h+8){hit=els[i];break}}
-  sel=hit?hit.id:null;if(hit){drag={id:hit.id,dx:hit.x*W-p.x,dy:hit.y*H-p.y,pre:JSON.stringify(els)};cv.setPointerCapture(ev.pointerId)}
+  sel=hit?hit.id:null;if(hit&&!hit.lock){drag={id:hit.id,dx:hit.x*W-p.x,dy:hit.y*H-p.y,pre:JSON.stringify(els)};cv.setPointerCapture(ev.pointerId)}
   props();render()});
-cv.addEventListener('pointermove',ev=>{if(scanDrag){scanMove(ev);return}if(!drag){hoverH(ev);return}if(drag.hd){resizeMove(ev);return}const p=pt(ev),e=els.find(a=>a.id===drag.id);e.x=Math.min(1,Math.max(0,(p.x+drag.dx)/W));e.y=Math.min(1,Math.max(0,(p.y+drag.dy)/H));render()});
-cv.addEventListener('pointerup',()=>{if(scanDrag)scanEnd();if(drag&&JSON.stringify(els)!==drag.pre)hist(drag.pre);if(drag&&drag.hd)props();drag=null});
+cv.addEventListener('pointermove',ev=>{if(scanDrag){scanMove(ev);return}if(!drag){hoverH(ev);return}if(drag.hd){resizeMove(ev);return}const p=pt(ev),e=els.find(a=>a.id===drag.id);e.x=Math.min(1,Math.max(0,(p.x+drag.dx)/W));e.y=Math.min(1,Math.max(0,(p.y+drag.dy)/H));snapG(e);render()});
+cv.addEventListener('pointerup',()=>{guides=[];if(scanDrag)scanEnd();if(drag&&JSON.stringify(els)!==drag.pre)hist(drag.pre);if(drag&&drag.hd)props();drag=null});
 
 function dataSync(){/* kolom data mengikuti elemen */}
 /* Template upload */
@@ -1070,6 +1095,7 @@ function render(){
   if(e&&e.type==='photo'){const b=pb(e),rd=hr();ctx.save();ctx.lineWidth=lw;ctx.setLineDash([]);ctx.strokeStyle='#3b82f6';rr(ctx,b.l,b.t,b.w,b.h,(e.r||0)*Math.min(b.w,b.h)/2);ctx.stroke();radH(e,b,rd);hpts(b).forEach(q=>{ctx.beginPath();ctx.arc(q.x,q.y,rd,0,7);ctx.fillStyle='#fff';ctx.fill();ctx.stroke()});ctx.restore()}
   else if(e){const b=bounds(e);box(b.l-6,b.t-4,b.w+12,b.h+8)}
   if(R){ctx.save();ctx.fillStyle='rgba(255,213,12,.18)';ctx.fillRect(R.x,R.y,R.w,R.h);ctx.restore();box(R.x,R.y,R.w,R.h)}
+  (guides||[]).forEach(g=>{ctx.save();ctx.strokeStyle=g.c;ctx.lineWidth=Math.max(2,W/400);ctx.setLineDash([6,4]);ctx.beginPath();if(g.t==='v'){ctx.moveTo(g.pos*W,0);ctx.lineTo(g.pos*W,H)}else{ctx.moveTo(0,g.pos*H);ctx.lineTo(W,g.pos*H)}ctx.stroke();ctx.restore()});
 }
 function addEl(type,x,y,name){
   const e={id:'e'+(nid++),type,name:name||(type==='text'?'Teks '+nid:'Foto '+nid),x,y,fs:.045,color:sampleTpl?'#FFD50C':'#111111',font:'Montserrat',align:'center',bold:false,w:.16,h:.2,r:0,dyn:true,text:''};
@@ -1230,7 +1256,7 @@ function table(){
     C.forEach(e=>{const td=tr.insertCell();
       if(xcols.includes(e)){const i=document.createElement('textarea');i.rows=1;i.className='cell';i.placeholder=e.name;i.value=r[e.id]||'';i.oninput=()=>{r[e.id]=i.value;cur=ri;nav()};td.appendChild(i)}
       else if(e.type==='text'){const i=document.createElement('textarea');i.rows=1;i.className='cell';i.value=r[e.id]||'';const fit=()=>{i.style.height='auto';if(i.scrollHeight)i.style.height=Math.min(120,i.scrollHeight)+'px'};i.oninput=()=>{r[e.id]=i.value;cur=ri;nav();render();fit()};td.appendChild(i)}
-      else{const w=document.createElement('div');w.className='ph';if(r[e.id]){const im=new Image();im.src=r[e.id];w.appendChild(im)}
+      else{td.dataset.pid=e.id;const w=document.createElement('div');w.className='ph';if(r[e.id]){const im=new Image();im.src=r[e.id];w.appendChild(im)}
         const f=document.createElement('input');f.type='file';f.accept='image/*';f.onchange=()=>{const fr=new FileReader();fr.onload=()=>{r[e.id]=fr.result;if(r.__p)delete r.__p[e.id];cur=ri;nav();table();render()};f.files[0]&&fr.readAsDataURL(f.files[0])};w.appendChild(f);td.appendChild(w)}});
     tr.insertCell();
     const x=tr.insertCell(),b=document.createElement('button');b.textContent='✕';b.className='btn danger';b.style.padding='4px 9px';b.onclick=()=>{rows.splice(ri,1);if(!rows.length)rows.push({});cur=Math.min(cur,rows.length-1);table();nav();render()};x.appendChild(b);
@@ -1782,7 +1808,7 @@ function stepVal(o,v){(rows[o.ri]=rows[o.ri]||{})[o.id]=v;cur=o.ri;nav();props()
 function undoH(){if(!undo.length){toast('Tidak ada yang bisa diurungkan.');return}const o=undo.pop();if(typeof o==='object'){redo.push(o);stepObj(o,0);return}redo.push(JSON.stringify(els));applyState(o)}
 function redoH(){if(!redo.length){toast('Tidak ada yang bisa diulang.');return}const o=redo.pop();if(typeof o==='object'){undo.push(o);stepObj(o,1);return}undo.push(JSON.stringify(els));applyState(o)}
 function hbtn(){const sl=!!(sel&&els.some(e=>e.id===sel));$('#t-undo').disabled=!undo.length;$('#t-redo').disabled=!redo.length;$('#t-dup').disabled=!sl;$('#t-del').disabled=!sl}
-function delSel(){const e=els.find(a=>a.id===sel);if(!e)return;hist();els=els.filter(a=>a!==e);sel=null;props();render();toast('Elemen dihapus. Ctrl+Z untuk mengurungkan.')}
+function delSel(){const e=els.find(a=>a.id===sel);if(!e)return;if(e.lock){toast('Elemen terkunci. Buka kunci dulu di panel Layer.');return}hist();els=els.filter(a=>a!==e);sel=null;props();render();toast('Elemen dihapus. Ctrl+Z untuk mengurungkan.')}
 function copySel(){const e=els.find(a=>a.id===sel);if(!e)return false;clip=JSON.parse(JSON.stringify(e));pc=0;return true}
 function pasteEl(){
   if(!clip)return;hist();const o=clip,n=JSON.parse(JSON.stringify(o));n.id='e'+(nid++);pc++;n.x=Math.min(.98,o.x+.02*pc);n.y=Math.min(.98,o.y+.02*pc);
@@ -1813,6 +1839,196 @@ document.addEventListener('keydown',ev=>{
     render();return}
   const map={v:'select',t:'text',f:'photo',s:'scan'};if(map[k]&&!rng)setTool(map[k])});
 document.fonts.ready.then(()=>render());
+/* ===== v2.2.0 ===== */
+var guides=[];
+function snapG(e){
+  const T=7/W,U=7/H;guides=[];
+  if(Math.abs(e.x-.5)<T){e.x=.5;guides.push({t:'v',pos:.5,c:'#e11d48'})}
+  if(Math.abs(e.y-.5)<U){e.y=.5;guides.push({t:'h',pos:.5,c:'#e11d48'})}
+  els.forEach(o=>{if(o===e||o.cover)return;
+    if(Math.abs(e.x-o.x)<T){e.x=o.x;guides.push({t:'v',pos:o.x,c:'#FFD50C'})}
+    if(Math.abs(e.y-o.y)<U){e.y=o.y;guides.push({t:'h',pos:o.y,c:'#FFD50C'})}
+  });
+}
+// Impor Excel / CSV
+$('#impBtn').onclick=()=>$('#impFile').click();
+$('#impFile').onchange=async ev=>{
+  const f=ev.target.files[0];ev.target.value='';if(!f)return;
+  if(typeof XLSX==='undefined'){toast('Library Excel belum termuat. Periksa koneksi internet.');return}
+  try{
+    const wb=XLSX.read(new Uint8Array(await f.arrayBuffer()),{type:'array'});
+    const grid=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:false});
+    const head=(grid[0]||[]).map(h=>String(h).trim());
+    const body=grid.slice(1).filter(r=>r.some(v=>String(v).trim()!==''));
+    if(!head.some(Boolean)||!body.length){toast('File kosong atau tidak ada baris data.');return}
+    if(!confirm('Impor '+body.length+' baris dari '+f.name+'?\nData tabel saat ini akan diganti.'))return;
+    hist();
+    const map=head.map(h=>{
+      if(!h)return null;const hl=h.toLowerCase();
+      const d=dynEls().find(e=>e.type!=='photo'&&e.name.trim().toLowerCase()===hl);if(d)return d.id;
+      const x=xcols.find(o=>o.name.trim().toLowerCase()===hl);if(x)return x.id;
+      const nx={id:xid(),name:h};xcols.push(nx);return nx.id;
+    });
+    rows=body.map(r=>{const o={};map.forEach((id,i)=>{const v=r[i];if(id&&v!==undefined&&String(v).trim()!=='')o[id]=String(v).trim()});return o});
+    cur=0;table();nav();render();buildCp();
+    toast(rows.length+' baris diimpor.');
+  }catch(err){console.error(err);toast('Gagal membaca file: '+err.message)}
+};
+// Upload foto massal: nama file dicocokkan dengan kolom nama (teks pertama)
+$('#bulkBtn').onclick=()=>$('#bulkFile').click();
+$('#bulkFile').onchange=async ev=>{
+  const files=[...ev.target.files];ev.target.value='';if(!files.length)return;
+  const keyEl=dynEls().find(e=>e.type==='text'),phEl=dynEls().find(e=>e.type==='photo');
+  if(!keyEl){toast('Tambahkan Dynamic Text (nama) dulu.');return}
+  if(!phEl){toast('Tambahkan Dynamic Foto dulu.');return}
+  hist();
+  const readUrl=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});
+  let ok=0;const miss=[];
+  for(const f of files){
+    const base=f.name.replace(/\.[^.]+$/,'').trim().toLowerCase();
+    const i=rows.findIndex(r=>String(r[keyEl.id]||'').trim().toLowerCase()===base);
+    if(i<0){miss.push(f.name);continue}
+    const url=await readUrl(f);rows[i][phEl.id]=url;ok++;
+    loadImg(url).then(()=>render());
+  }
+  table();nav();render();
+  toast(ok+' foto cocok'+(miss.length?', '+miss.length+' tidak cocok (nama file harus sama dengan nama peserta)':'')+'.');
+};
+// Lompat ke baris dengan teks terpanjang
+$('#longest').onclick=()=>{
+  const tf=dynEls().filter(e=>e.type==='text').concat(xcols);
+  let best=0,bl=-1;
+  rows.forEach((r,i)=>tf.forEach(e=>{const L=String(r[e.id]||'').length;if(L>bl){bl=L;best=i}}));
+  cur=best;nav();render();toast('Baris '+(best+1)+': teks terpanjang ('+bl+' karakter).');
+};
+// Layer: urutan, kunci
+function layerMove(e,op){
+  const i=els.indexOf(e);if(i<0)return;hist();
+  els.splice(i,1);
+  const j=op==='front'?els.length:op==='back'?0:op==='up'?Math.min(els.length,i+1):Math.max(0,i-1);
+  els.splice(j,0,e);renderLayers();render();
+}
+function renderLayers(){
+  const P=$('#props');const old=$('#layers');if(old)old.remove();
+  if(!tpl||!els.length)return;
+  const box=document.createElement('div');box.id='layers';
+  box.innerHTML='<div class="lyh">Layer <small>atas = paling depan</small></div>';
+  [...els].reverse().forEach(e=>{
+    const row=document.createElement('div');
+    row.className='lyr'+(e.id===sel?' on':'')+(e.lock?' lk':'');
+    row.innerHTML='<span class="lyt">'+(e.type==='text'?'T':'▣')+'</span><span class="lyn"></span>'+
+      '<button data-a="lock" title="Kunci posisi">'+(e.lock?'🔒':'🔓')+'</button>'+
+      '<button data-a="fwd" title="Bawa ke depan">⤒</button><button data-a="up" title="Naik satu">↑</button>'+
+      '<button data-a="dn" title="Turun satu">↓</button><button data-a="back" title="Kirim ke belakang">⤓</button>';
+    row.querySelector('.lyn').textContent=e.name;
+    row.addEventListener('click',ev=>{
+      const b=ev.target.closest('button');const a=b?b.dataset.a:null;
+      if(!a){sel=e.id;props();render();return}
+      if(a==='lock'){hist();e.lock=!e.lock;renderLayers();render();return}
+      layerMove(e,a==='fwd'?'front':a==='back'?'back':a);
+    });
+    box.appendChild(row);
+  });
+  P.insertBefore(box,P.children[1]||null);
+}
+const _props=props;props=function(){_props();renderLayers()};
+const _render=render;render=function(){_render();scheduleDraft()};
+// Simpan & muat proyek (.flazz)
+async function projectData(){
+  let src=null;
+  if(tpl){const c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(tpl,0,0,W,H);src=c.toDataURL('image/png')}
+  return{app:'CertiFlazz',version:'2.2.0',W,H,tpl:src,sample:sampleTpl,els,xcols,colOrder,rows,nid};
+}
+async function applyProject(d){
+  if(!d||!Array.isArray(d.els))throw new Error('Format proyek tidak valid');
+  if(d.tpl)await new Promise((res,rej)=>{const im=new Image();im.onload=()=>{setTpl(im,false);res()};im.onerror=()=>rej(new Error('template rusak'));im.src=d.tpl});
+  els=d.els;xcols=d.xcols||[];colOrder=d.colOrder||[];
+  rows=d.rows&&d.rows.length?d.rows:[{}];nid=Math.max(nid,d.nid||1);
+  sel=null;cur=0;undo=[];redo=[];
+  table();buildCp();props();nav();render();hbtn();
+}
+$('#saveL').onclick=async()=>{
+  const d=await projectData();
+  const url=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));
+  const a=document.createElement('a');a.href=url;a.download='proyek-certiflazz-'+new Date().toISOString().slice(0,10)+'.flazz';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+  toast('Proyek disimpan ke file.');
+};
+$('#loadL').onclick=()=>$('#loadFile').click();
+$('#loadFile').onchange=async ev=>{
+  const f=ev.target.files[0];ev.target.value='';if(!f)return;
+  try{
+    if(!confirm('Muat proyek dari '+f.name+'?\nPekerjaan di layar saat ini akan diganti.'))return;
+    await applyProject(JSON.parse(await f.text()));
+    toast('Proyek dimuat.');
+  }catch(err){toast('Gagal memuat: '+err.message)}
+};
+$('#cloudSave').onclick=async()=>{
+  const name=await fzAsk({title:'Simpan ke cloud',hint:'Nama proyek. Jika nama sudah ada, proyek itu akan diperbarui.',ok:'Simpan',value:window.flazProjName||'Proyek baru'});
+  if(!name)return;
+  try{await window.flazCloud.save(name,await projectData());window.flazProjName=name;toast('Proyek "'+name+'" tersimpan di cloud.')}
+  catch(err){toast('Gagal: '+err.message)}
+};
+$('#cloudLoad').onclick=async()=>{
+  const name=await fzAsk({title:'Buka dari cloud',hint:'Ketik nama proyek yang sudah disimpan.',ok:'Buka',value:window.flazProjName||''});
+  if(!name)return;
+  try{await applyProject(await window.flazCloud.load(name));window.flazProjName=name;toast('Proyek "'+name+'" dibuka.')}
+  catch(err){toast('Gagal: '+err.message)}
+};
+// Auto-simpan (draft lokal) agar tidak hilang saat halaman di-refresh
+var draftT=null;
+function scheduleDraft(){clearTimeout(draftT);draftT=setTimeout(async()=>{try{localStorage.setItem('flazz-draft',JSON.stringify(await projectData()))}catch(e){}},1500)}
+setTimeout(()=>{
+  let raw=null;try{raw=localStorage.getItem('flazz-draft')}catch(e){}
+  if(raw&&confirm('Lanjutkan pekerjaan terakhir (auto-simpan)?')){applyProject(JSON.parse(raw)).catch(err=>toast('Gagal memulihkan: '+err.message))}
+},400);
+
+/* ===== v2.2.1: drop foto langsung ke tabel ===== */
+async function assignPhotos(files,startRow,phId){
+  const phEl=phId?els.find(e=>e.id===phId):dynEls().find(e=>e.type==='photo');
+  if(!phEl){toast('Tambahkan Dynamic Foto dulu.');return}
+  const keyEl=dynEls().find(e=>e.type==='text');
+  const readUrl=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});
+  hist();
+  let ok=0;const miss=[];
+  if(startRow!=null){
+    // Dijatuhkan di sel foto: isi berurutan mulai dari baris itu
+    for(let k=0;k<files.length;k++){
+      const i=startRow+k;
+      if(i>=rows.length){miss.push(files[k].name);continue}
+      const url=await readUrl(files[k]);rows[i][phEl.id]=url;loadImg(url).then(()=>render());ok++;
+    }
+  }else{
+    // Dijatuhkan di luar sel: cocokkan nama file dengan kolom nama
+    if(!keyEl){toast('Tambahkan Dynamic Text (nama) dulu.');return}
+    for(const f of files){
+      const base=f.name.replace(/\.[^.]+$/,'').trim().toLowerCase();
+      const i=rows.findIndex(r=>String(r[keyEl.id]||'').trim().toLowerCase()===base);
+      if(i<0){miss.push(f.name);continue}
+      const url=await readUrl(f);rows[i][phEl.id]=url;loadImg(url).then(()=>render());ok++;
+    }
+  }
+  table();nav();render();
+  toast(ok+' foto dimasukkan'+(miss.length?', '+miss.length+' tidak cocok':'')+'.');
+}
+function setupTableDrop(){
+  const box=$('#tbl').parentElement;
+  const isFiles=ev=>ev.dataTransfer&&[...ev.dataTransfer.types].includes('Files');
+  box.addEventListener('dragenter',ev=>{if(!isFiles(ev))return;ev.preventDefault();box.classList.add('dropOn')});
+  box.addEventListener('dragover',ev=>{if(!isFiles(ev))return;ev.preventDefault();ev.dataTransfer.dropEffect='copy'});
+  box.addEventListener('dragleave',ev=>{if(!box.contains(ev.relatedTarget))box.classList.remove('dropOn')});
+  box.addEventListener('drop',ev=>{
+    if(!isFiles(ev))return;
+    ev.preventDefault();box.classList.remove('dropOn');
+    const files=[...ev.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+    if(!files.length){toast('Hanya file gambar yang bisa dijatuhkan.');return}
+    const td=ev.target.closest&&ev.target.closest('td[data-pid]');
+    if(td)assignPhotos(files,td.parentElement.rowIndex,td.dataset.pid);
+    else assignPhotos(files,null,null);
+  });
+}
+setupTableDrop();
+
 useSample();
 </script>
 <script>
@@ -2123,6 +2339,20 @@ useSample();
     }
   });
 
+  window.flazCloud = {
+    async save(name, data){
+      if (!sb || !uid) throw new Error('Silakan masuk terlebih dahulu.');
+      const { error } = await sb.from('projects').upsert({ user_id: uid, name, data, updated_at: new Date().toISOString() }, { onConflict: 'user_id,name' });
+      if (error) throw error;
+    },
+    async load(name){
+      if (!sb || !uid) throw new Error('Silakan masuk terlebih dahulu.');
+      const { data, error } = await sb.from('projects').select('data').eq('name', name).maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error('Proyek "' + name + '" tidak ditemukan.');
+      return data.data;
+    }
+  };
   window.flazBalance = () => coins;
   window.flazResult = (from, to, n) => showSpendResult(from, to, n);
   // ===== Konfirmasi & animasi saldo saat generate =====
